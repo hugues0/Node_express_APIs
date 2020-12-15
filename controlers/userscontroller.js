@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import jwt from 'jsonwebtoken';
 
 let users = [];
 
@@ -46,4 +47,27 @@ export const updateUser = (req,res) => {
     res.send(`the user with id ${id} has been updated`);
     
  
-}
+};
+
+export const userLogin = (req,res) => {
+
+    
+    const user = { id: 3 };
+    const token = jwt.sign({user}, 'my_secret_key');
+    res.json({
+        token: token
+    });
+};
+
+
+export const ensureToken = (req,res,next) =>{
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !=='undefined'){
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+        next(); 
+    } else {
+        res.sendStatus(403);
+    }
+};
