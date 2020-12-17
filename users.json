@@ -1,6 +1,19 @@
- {
-     "firstName" : "john",
-     "lastName" : "Doe",
-     "age": 21
+ [
+     {
+        "firstName" : "john",
+        "lastName" : "Doe",
+        "username" : "johnDoe",
+        "password" : "password1",
+        "age": 21
 
- }
+    },
+    {
+        "firstName" : "Johan",
+        "lastName" : "Doen",
+        "username" : "johanDoe",
+        "password" : "password2",
+        "age": 23
+        
+    }
+
+ ]

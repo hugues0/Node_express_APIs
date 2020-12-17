@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
+import { response } from 'express';
 
-let users = [];
+let users = import("../users.json");
 
 export const getUsers = (req,res) => {
     
@@ -49,25 +50,23 @@ export const updateUser = (req,res) => {
  
 };
 
-export const userLogin = (req,res) => {
+export const checkToken = (req,res,next) =>{
 
-    
-    const user = { id: 3 };
-    const token = jwt.sign({user}, 'my_secret_key');
-    res.json({
-        token: token
-    });
-};
-
-
-export const ensureToken = (req,res,next) =>{
-    const bearerHeader = req.headers["authorization"];
-    if (typeof bearerHeader !=='undefined'){
-        const bearer = bearerHeader.split(" ");
-        const bearerToken = bearer[1];
-        req.token = bearerToken;
-        next(); 
-    } else {
-        res.sendStatus(403);
+    const token = req.headers["x-access-token"];
+    if (token){
+        jwt.verify(token,"bigSecret",(err,decoded) =>{
+            if (err){
+                res.status(401).json({message: "Access denied"});
+                return;
+            } else {
+                req.userID = decoded.userID;
+            }
+        })
+    }else{
+        res.status(401).json({message: "Access denied"});
     }
-};
+    next();
+    
+}
+
+
